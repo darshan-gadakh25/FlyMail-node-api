@@ -7,6 +7,7 @@ export const register = async ({ name, email, password, role }) => {
   return await user.save();
 };
 
+// login with generate token
 export const login = async (email, password) => {
   const normalizedEmail = String(email).trim().toLowerCase();
   const user = await User.findOne({ email: normalizedEmail });

@@ -1,6 +1,6 @@
 import * as UserService from "../services/userService.js";
 import { registerEmailTemplate } from "../templates/registerEmailTemplate.js";
-import sendmail from "../utils/sendEmail.js";
+import {sendmail, sendmailWithsender}  from "../utils/sendEmail.js";
 import generateToken from "../middleware/auth.js";
 
 export const register = async (req, res) => {
@@ -19,13 +19,14 @@ export const register = async (req, res) => {
   }
 };
 
+// POST /api/users/signin
 export const signin = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await UserService.login(email, password);
 
     const payload = {
-      id: user.id,
+      id: user._id.toString(),
       name: user.name,
       email: user.email,
       role: user.role,
