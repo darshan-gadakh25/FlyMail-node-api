@@ -2,6 +2,7 @@ import * as UserService from "../services/userService.js";
 import { registerEmailTemplate } from "../templates/registerEmailTemplate.js";
 import {sendmail, sendmailWithsender}  from "../utils/sendEmail.js";
 import generateToken from "../middleware/auth.js";
+import {otpStore}from "../utils/otpStore.js";
 
 export const register = async (req, res) => {
   try {
@@ -47,7 +48,9 @@ export const sendOtp = async (req, res) => {
   
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-  // otpStore.set(email, otp);
+  console.log(typeof(otp));
+  
+  otpStore.set(email, otp);
 
      const emailHtml = `
       <h2>HI ${user.name}!</h2>
@@ -63,4 +66,21 @@ export const sendOtp = async (req, res) => {
     );
 
   res.status(200).json({ message: "OTP sent (check you mail)" });
+};
+
+export const resetPassword = async (req, res) => {
+  const {email, otp, newPassword } = req.body;
+
+  const storedOtp = otpStore.get(email);
+
+  if (storedOtp !== otp) {
+    return res.status(400).json({ error: "Invalid OTP" });
+  }
+
+  try {
+    await UserService.updateUserPassword(email, newPassword);
+    res.status(200).json({ message: "Password successfully updated" });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 };

@@ -29,3 +29,14 @@ export const findUser = async (email) => {
 
  return user;
 };
+
+
+export const updateUserPassword = async (email, newPassword) => {
+  const user = await User.findOne({ email });
+  if (!user) throw new Error("user not found");
+
+  user.password = await bcrypt.hash(newPassword, 10);
+  await user.save();
+
+  return user;
+};
