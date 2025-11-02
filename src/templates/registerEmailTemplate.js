@@ -77,7 +77,7 @@ export const registerEmailTemplate = (username) => `
         <p>
           You can now send and receive mails seamlessly using our secure platform.
         </p>
-        <a href="https://yourapp.com/login" class="button">Go to Dashboard</a>
+        <a href="https://flymail.top/register" class="button">Go to Dashboard</a>
         <p style="margin-top: 25px;">
           If you didn’t create this account, you can safely ignore this email.
         </p>

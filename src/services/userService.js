@@ -20,3 +20,12 @@ export const login = async (email, password) => {
 
   return user;
 };
+
+export const findUser = async (email) => {
+  const normalizedEmail = String(email).trim().toLowerCase();
+  const user = await User.findOne({ email: normalizedEmail });
+    
+  if (!user) throw new Error("User not found");
+
+ return user;
+};

@@ -40,3 +40,27 @@ export const signin = async (req, res) => {
     res.status(401).json({ error: err.message });
   }
 };
+
+export const sendOtp = async (req, res) => {
+  const { email } = req.body;
+  const user = await UserService.findUser(email);
+  
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+  // otpStore.set(email, otp);
+
+     const emailHtml = `
+      <h2>HI ${user.name}!</h2>
+      <p>SEnd  Otp for change password.</p>
+      <p>Your OTP  is: <h3>${otp}</h3></p>
+      <p> Do not share it  with others</p>
+    `;
+ 
+ await sendmail(
+      user.email,
+      "OTP for reset password",
+      emailHtml,
+    );
+
+  res.status(200).json({ message: "OTP sent (check you mail)" });
+};
